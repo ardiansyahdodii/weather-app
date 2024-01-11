@@ -24,7 +24,7 @@ const MainContent = (props) => {
 
     console.log(weatherDatas)
     return (
-        <div className="bg-gray-500/30 w-full md:w-2/4 h-[400px] mt-5 p-5 rounded-lg">
+        <div className="bg-gray-500/40 w-full md:w-2/4 h-[400px] mt-5 p-5 rounded-lg">
             {/* atas */}
             {weatherDatas.map((weather, index) => (
                 <div key={index}>
@@ -50,7 +50,7 @@ const MainContent = (props) => {
             ))}
             {/* bawah */}
             <div className="mt-10 text-xl">
-                <table className="w-full">
+                <table className="w-full ">
                     <thead>
                         <tr>
                             <td></td>
