@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { currentWeather } from "../services/api";
+import { currentWeather, forecastWeather } from "../services/api";
 
 const MainContent = (props) => {
     const [weatherDatas, setWeatherDatas] = useState([])
+    const [forecastData, setForcastData] = useState([])
     useEffect(() => {
         currentWeather(props.city)
             .then((res) => {
-                console.log(res)
+                // console.log(res)
                 const formatData = [{
                     city: res.name,
                     country: res.sys.country,
@@ -20,9 +21,30 @@ const MainContent = (props) => {
 
                 setWeatherDatas(formatData)
             })
+            .catch((err) => {
+                console.log(err)
+            })
+
+        forecastWeather(props.city)
+            .then((res) => {
+                // console.log(res)
+                const formatData = res.list.map((item) => {
+                    return {
+                        tempMin: item.main.temp_min,
+                        tempMax: item.main.temp_max,
+                        hour: new Date(item.dt * 1000).toLocaleTimeString("id-ID", { hour: 'numeric' }),
+                        minute: new Date(item.dt * 1000).toLocaleTimeString("id-ID", { minute: 'numeric' }),
+                        // day: new Date(item.dt * 1000).toLocaleDateString("id-ID", { day: 'numeric' }),
+                        // month: new Date(item.dt * 1000).toLocaleDateString("id-ID", { month: 'short' }),
+                        // year: new Date(item.dt * 1000).toLocaleDateString("id-ID", { year: 'numeric' }),
+                    }
+                })
+                setForcastData(formatData)
+            })
     }, [props.city])
 
     console.log(weatherDatas)
+    console.log(forecastData);
     return (
         <div className="bg-gray-500/40 w-full md:w-2/4 h-[400px] mt-5 p-5 rounded-lg">
             {/* atas */}
@@ -49,37 +71,30 @@ const MainContent = (props) => {
                 </div>
             ))}
             {/* bawah */}
-            <div className="mt-10 text-xl">
+            <div className="mt-20 text-xl">
                 <table className="w-full ">
                     <thead>
                         <tr>
                             <td></td>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>5</td>
+                            {forecastData.filter((item, index) => index < 5).map((item, index) => (
+                                <td key={index} className="text-center font-bold">{item.hour}.{item.minute}0</td>
+                            ))}
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Min</td>
-                            <td>7</td>
-                            <td>8</td>
-                            <td>9</td>
-                            <td>10</td>
-                            <td>11</td>
+                            <td className="pt-3">Min</td>
+                            {forecastData.filter((item, index) => index < 5).map((item, index) => (
+                                <td key={index} className="text-center pt-3">{Math.floor(item.tempMin - 273.15)} °C</td>
+                            ))}
                         </tr>
                         <tr>
-                            <td>Max</td>
-                            <td>12</td>
-                            <td>13</td>
-                            <td>14</td>
-                            <td>15</td>
-                            <td>16</td>
+                            <td className="pt-3">Max</td>
+                            {forecastData.filter((item, index) => index < 5).map((item, index) => (
+                                <td key={index} className="text-center pt-3">{Math.floor(item.tempMax - 273.15)} °C</td>                             // <td>{Math.floor(item.tempMax - 273.15)} °C | {Math.floor((item.tempMax - 273.15) * 9 / 5 + 32)} °F</td>
+                            ))}
                         </tr>
                     </tbody>
-
                 </table>
             </div>
         </div >

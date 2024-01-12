@@ -1,5 +1,6 @@
 import { useState } from "react"
 import MainContent from "./components/MainContent"
+import Footer from "./components/Footer"
 
 const App = () => {
   const [city, setCity] = useState('bandung')
@@ -13,6 +14,7 @@ const App = () => {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-gray-700 p-5" style={{ backgroundImage: "url(/assets/bg-full.jpg)", backgroundSize: 'cover' }}>
       <h1 className="mt-5 text-4xl font-bold">Weather App</h1>
+      <h3 className="mt-1 ">Find the weather in your city</h3>
       <div className="mt-5">
         <form onSubmit={submitCity} className="flex space-x-3">
           <input type="text" name="city" id="city" placeholder="Search City Name" value={changeCity} onChange={(e) => setChangeCity(e.target.value)} className="p-2 rounded font-semibold text-black" />
@@ -21,7 +23,10 @@ const App = () => {
       </div>
 
       <MainContent city={city} />
-
+      <div className="bottom-0">
+        <Footer />
+      </div>
+      
     </div>
   )
 }
